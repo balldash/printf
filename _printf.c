@@ -1,37 +1,82 @@
 #include "main.h"
 
 /**
- * _printf - prints a formated string
- * @format: a string having all the characters
- * @...: the other arguments
- * Return: the total count of the characters printed
+ * _printf - functions that prints
+ * @format: format of the string
+ * @...: other arguments
+ * Return: a string
  */
 
 int _printf(const char *format, ...)
 {
-	int printed_chars;
-	conver_t f_list[] = {
-		{"c", print_char},
-		{"s", print_string},
-		{"%", print_percent},
-		{"d", print_integer},
-		{"i", print_integer},
-		{"b", print_binary},
-		{"r", print_reversed},
-		{"R", rot13},
-		{"u", unsigned_integer},
-		{"o", print_octal},
-		{"x", print_hex},
-		{"X", print_heX},
+	va_list ap;
+	int count = -1;
+
+	pr_f ops[] = {
+		{"c", print_c},
+		{"s", print_s},
+		{"d", print_d},
+		{"%", print_mod},
+		{"i", print_d},
+		{"r", print_r},
 		{NULL, NULL}
 	};
-	va_list arg_list;
 
-	if (format == NULL)
-		return (-1);
+	if (format != NULL)
+	{
+		va_start(ap, format);
+		count = _function(format, ops, ap);
+		va_end(ap);
+	}
+	return (count);
+}
 
-	va_start(arg_list, format);
-	printed_chars = parser(format, f_list, arg_list);
-	va_end(arg_list);
-	return (printed_chars);
+/**
+ * _function - prints and calls functions
+ * @format: string passed
+ * @ops: special options
+ * @ap: arguments
+ * Return: number of chars printed
+ */
+
+int _function(const char *format, pr_f ops[], va_list ap)
+{
+	int count = 0, i, j;
+
+	for (i = 0; format[i] != '\0'; i++)
+	{
+		if (format[i] == '%')
+		{
+			if (format[i + 1] == '\0')
+			{
+				return (-1);
+			}
+			for (j = 0; ops[j].op != NULL; j++)
+			{
+				if (format[i + 1] == ops[j].op[0])
+				{
+					count = count + ops[j].f(ap);
+					break;
+				}
+			}
+			if (ops[j].op == NULL && format[i + 1] != ' ')
+			{
+				if (format[i + 1] != '\0')
+				{
+					_putchar(format[i]);
+					_putchar(format[i + 1]);
+					count = count + 2;
+				}
+				else
+					return (-1);
+			}
+			i = i + 1;
+		}
+		else
+		{
+			_putchar(format[i]);
+			count = count + 1;
+		}
+	}
+	return (count);
 }

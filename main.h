@@ -1,45 +1,35 @@
-#ifndef PRINT_F
-#define PRINT_F
+#ifndef MAIN_F
+#define MAIN_F
 
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <stddef.h>
+#include <string.h>
 
 /**
- * struct convert - defines a structure
+ * struct pr - defines a structure
  * for symbols and functions
  * @sym: the operator
  * @f: the function associated
  */
 
-struct convert
+typedef struct pr
 {
-	char *sym;
+	char *op;
 	int (*f)(va_list);
-};
+} pr_f;
 
-typedef struct convert conver_t;
-
-int parser(const char *format, conver_t f_list[], va_list arg_list);
+int _putchar(char c);
 int _printf(const char *format, ...);
-int _write_char(char);
-int print_char(va_list);
-int print_string(va_list);
-int print_percent(va_list);
-int print_integer(va_list);
-int print_number(va_list);
-int print_binary(va_list);
-int print_reversed(va_list arg);
-int rot13(va_list);
-int unsigned_integer(va_list);
-int print_octal(va_list list);
-int print_hex(va_list list);
-int print_heX(va_list list);
-
-unsigned int base_len(unsigned int, int);
-char *rev_string(char *);
-void write_base(char *str);
-char *_memcpy(char *dest, char *src, unsigned int n);
-int print_unsigned_number(unsigned int);
+int print_c(va_list list);
+int print_s(va_list list);
+int print_i(va_list list);
+int print_d(va_list list);
+int print_r(va_list list);
+int print_mod(va_list list);
+int print_d(va_list list);
+int _strlen(char *s);
+int _function(const char *format, pr_f ops[], va_list ap);
 
 #endif
